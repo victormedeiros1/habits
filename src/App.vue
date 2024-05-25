@@ -21,6 +21,11 @@
         </div>
       </form>
 
+      <div class="habbits__progressbar">
+        {{ progress }}%
+        <progress max="100" :value="progress" />
+      </div>
+
       <div class="habbits__habits">
         <div
           v-for="(habit, index) in habits"
@@ -44,7 +49,7 @@
 
 <script setup lang="ts">
   import { v4 as uuidv4 } from 'uuid'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   interface Habit {
     id: string
@@ -64,6 +69,19 @@
       done: false
     })
   }
+
+  const progress = computed(() => {
+    const numberOfHabits = habits.value.length
+
+    if (numberOfHabits) {
+      const numberOfHabitsDone = habits.value.filter(
+        (habit) => habit.done
+      ).length
+      return ((numberOfHabitsDone / numberOfHabits) * 100).toFixed(0)
+    }
+
+    return 0
+  })
 </script>
 
 <style scoped lang="scss">
