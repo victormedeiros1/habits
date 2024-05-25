@@ -1,10 +1,12 @@
-import { Habit } from '@/types/habits'
 import { defineStore } from 'pinia'
 import { v4 as uuidv4 } from 'uuid'
+import { useLocalStorage } from './useLocalStorage'
+
+const { getStoreInLocalStorage, setStoreInLocalStorage } = useLocalStorage()
 
 export const useHabitsStore = defineStore('habits', {
   state: () => ({
-    habits: [] as Habit[]
+    habits: getStoreInLocalStorage()
   }),
   getters: {
     getHabits: (state) => state.habits
@@ -16,6 +18,8 @@ export const useHabitsStore = defineStore('habits', {
         text,
         done: false
       })
+
+      setStoreInLocalStorage(this.habits)
     }
   }
 })
