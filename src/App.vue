@@ -2,8 +2,7 @@
   <div class="container">
     <div class="habbits">
       <h1 class="habbits__title">Habbits</h1>
-
-      <form class="form" @submit="createNewHabit">
+      <div class="form">
         <div class="form__group">
           <label id="form-label" class="form__label" for="form-input"
             >Qual o novo hábito?
@@ -12,14 +11,16 @@
             id="form-input"
             class="form__input"
             type="text"
-            v-model="name"
+            v-model="text"
           />
         </div>
 
         <div class="form__footer">
-          <button class="form__button">Adicionar</button>
+          <button class="form__button" @click="createNewHabit">
+            Adicionar
+          </button>
         </div>
-      </form>
+      </div>
 
       <div class="habbits__progressbar">
         {{ progress }}%
@@ -39,7 +40,7 @@
             v-model="habit.done"
           />
           <label :id="`habit-label-${index}`" :for="`habit-input-${index}`">{{
-            habit.name
+            habit.text
           }}</label>
         </div>
       </div>
@@ -48,35 +49,22 @@
 </template>
 
 <script setup lang="ts">
-  import { v4 as uuidv4 } from 'uuid'
   import { computed, ref } from 'vue'
+  import { useHabitsStore } from './store/habits'
 
-  interface Habit {
-    id: string
-    name: string
-    done: boolean
-  }
+  const { habits, addHabit } = useHabitsStore()
 
-  const name = ref<string>('')
-  const habits = ref<Habit[]>([])
+  const text = ref<string>('')
 
-  function createNewHabit(event: Event): void {
-    event.preventDefault()
-
-    habits.value.push({
-      id: uuidv4(),
-      name: name.value,
-      done: false
-    })
+  function createNewHabit(): void {
+    addHabit(text.value)
   }
 
   const progress = computed(() => {
-    const numberOfHabits = habits.value.length
+    const numberOfHabits = habits.length
 
     if (numberOfHabits) {
-      const numberOfHabitsDone = habits.value.filter(
-        (habit) => habit.done
-      ).length
+      const numberOfHabitsDone = habits.filter((habit) => habit.done).length
       return ((numberOfHabitsDone / numberOfHabits) * 100).toFixed(0)
     }
 
