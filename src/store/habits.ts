@@ -20,6 +20,11 @@ export const useHabitsStore = defineStore('habits', {
       })
 
       setStoreInLocalStorage(this.habits)
+    },
+    deleteHabit(id: string) {
+      this.habits = this.habits.filter((habit) => habit.id !== id)
+
+      setStoreInLocalStorage(this.habits)
     }
   }
 })

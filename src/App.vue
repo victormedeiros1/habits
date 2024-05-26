@@ -39,9 +39,11 @@
             type="checkbox"
             v-model="habit.done"
           />
-          <label :id="`habit-label-${index}`" :for="`habit-input-${index}`">{{
-            habit.text
-          }}</label>
+          <label :id="`habit-label-${index}`" :for="`habit-input-${index}`">
+            {{ habit.text }}
+          </label>
+
+          <button @click="deleteHabit(habit.id)">X</button>
         </div>
       </div>
     </div>
@@ -51,8 +53,10 @@
 <script setup lang="ts">
   import { computed, ref } from 'vue'
   import { useHabitsStore } from './store/habits'
+  import { storeToRefs } from 'pinia'
 
-  const { habits, addHabit } = useHabitsStore()
+  const { habits } = storeToRefs(useHabitsStore())
+  const { addHabit, deleteHabit } = useHabitsStore()
 
   const text = ref<string>('')
 
@@ -61,10 +65,12 @@
   }
 
   const progress = computed(() => {
-    const numberOfHabits = habits.length
+    const numberOfHabits = habits.value.length
 
-    if (numberOfHabits) {
-      const numberOfHabitsDone = habits.filter((habit) => habit.done).length
+    if (numberOfHabits > 0) {
+      const numberOfHabitsDone = habits.value.filter(
+        (habit) => habit.done
+      ).length
       return ((numberOfHabitsDone / numberOfHabits) * 100).toFixed(0)
     }
 
