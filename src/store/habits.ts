@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { v4 as uuidv4 } from 'uuid'
-import { useLocalStorage } from './useLocalStorage'
+import { useLocalStorage } from '@/utils/useLocalStorage'
 
 const { getStoreInLocalStorage, setStoreInLocalStorage } = useLocalStorage()
 
