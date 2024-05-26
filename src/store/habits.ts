@@ -25,6 +25,15 @@ export const useHabitsStore = defineStore('habits', {
       this.habits = this.habits.filter((habit) => habit.id !== id)
 
       setStoreInLocalStorage(this.habits)
+    },
+    toggleHabit(id: string) {
+      this.habits.find((habit) => {
+        if (habit.id === id) {
+          habit.done = !habit.done
+        }
+      })
+
+      setStoreInLocalStorage(this.habits)
     }
   }
 })

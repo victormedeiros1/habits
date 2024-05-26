@@ -38,6 +38,7 @@
             :id="`habit-input-${index}`"
             type="checkbox"
             v-model="habit.done"
+            @click="toggleHabit(habit.id)"
           />
           <label :id="`habit-label-${index}`" :for="`habit-input-${index}`">
             {{ habit.text }}
@@ -56,7 +57,7 @@
   import { storeToRefs } from 'pinia'
 
   const { habits } = storeToRefs(useHabitsStore())
-  const { addHabit, deleteHabit } = useHabitsStore()
+  const { addHabit, deleteHabit, toggleHabit } = useHabitsStore()
 
   const text = ref<string>('')
 
